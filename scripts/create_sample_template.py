@@ -33,40 +33,10 @@ def create_sample_template():
     
     doc.add_paragraph()  # Spacer
     
-    # Key Metrics Table
+    # Key Metrics Section (using simple loop, not table)
     doc.add_heading("Key Performance Metrics", level=2)
-    table = doc.add_table(rows=1, cols=4)
-    table.style = "Table Grid"
-    table.alignment = WD_TABLE_ALIGNMENT.CENTER
-    
-    # Header row
-    header_cells = table.rows[0].cells
-    header_cells[0].text = "Metric"
-    header_cells[1].text = "Value"
-    header_cells[2].text = "Change"
-    header_cells[3].text = "Status"
-    
-    # Make headers bold
-    for cell in header_cells:
-        for paragraph in cell.paragraphs:
-            for run in paragraph.runs:
-                run.bold = True
-    
-    # Template row for metrics (Jinja2 loop)
-    doc.add_paragraph("{%tr for metric in metrics %}")
-    metric_table = doc.add_table(rows=1, cols=4)
-    metric_table.style = "Table Grid"
-    cells = metric_table.rows[0].cells
-    cells[0].text = "{{ metric.name }}"
-    cells[1].text = "{{ metric.value }}"
-    cells[2].text = "{{ metric.change }}"
-    cells[3].text = "{{ metric.status }}"
-    doc.add_paragraph("{%tr endfor %}")
-    
-    # Alternative simple loop approach (more reliable)
-    doc.add_paragraph()
     doc.add_paragraph("{% for metric in metrics %}")
-    doc.add_paragraph("• {{ metric.name }}: {{ metric.value }} ({{ metric.change }})")
+    doc.add_paragraph("• {{ metric.name }}: {{ metric.value }} ({{ metric.change }}) - {{ metric.status }}")
     doc.add_paragraph("{% endfor %}")
     
     doc.add_paragraph()  # Spacer
@@ -82,7 +52,9 @@ def create_sample_template():
     # Recommendations Section  
     doc.add_heading("Recommendations", level=2)
     doc.add_paragraph("{% for rec in recommendations %}")
-    doc.add_paragraph("[{{ rec.priority }}] {{ rec.title }}")
+    p = doc.add_paragraph()
+    p.add_run("[{{ rec.priority }}] ").bold = True
+    p.add_run("{{ rec.title }}")
     doc.add_paragraph("{{ rec.description }}")
     doc.add_paragraph()
     doc.add_paragraph("{% endfor %}")
@@ -113,4 +85,3 @@ def create_sample_template():
 
 if __name__ == "__main__":
     create_sample_template()
-
