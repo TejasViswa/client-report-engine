@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Report Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10,9 9,9 8,9"/>
+                    </svg>
+                </div>
+                <span>Report Engine</span>
+            </div>
+            
+            <nav class="nav">
+                <button class="nav-item active" data-view="clients">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Clients
+                </button>
+                <button class="nav-item" data-view="generate">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    Generate Report
+                </button>
+                <button class="nav-item" data-view="templates">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                    Templates
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span id="api-status">Connecting...</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Clients View -->
+            <section id="clients-view" class="view active">
+                <header class="view-header">
+                    <div>
+                        <h1>Clients</h1>
+                        <p class="subtitle">Manage client brand configurations</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openClientModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Client
+                    </button>
+                </header>
+                
+                <div class="clients-grid" id="clients-grid">
+                    <!-- Clients will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Generate Report View -->
+            <section id="generate-view" class="view">
+                <header class="view-header">
+                    <div>
+                        <h1>Generate Report</h1>
+                        <p class="subtitle">Create a new client report</p>
+                    </div>
+                </header>
+                
+                <form id="report-form" class="report-form">
+                    <div class="form-section">
+                        <h3>Basic Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="report-client">Client *</label>
+                                <select id="report-client" required>
+                                    <option value="">Select a client...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="report-template">Template *</label>
+                                <select id="report-template" required>
+                                    <option value="">Select a template...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="report-date">Report Date</label>
+                                <input type="text" id="report-date" placeholder="December 9, 2025">
+                            </div>
+                            <div class="form-group">
+                                <label for="report-period">Report Period</label>
+                                <input type="text" id="report-period" placeholder="Q4 2025">
+                            </div>
+                            <div class="form-group">
+                                <label for="report-prepared-by">Prepared By</label>
+                                <input type="text" id="report-prepared-by" placeholder="Analytics Team">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Executive Summary</h3>
+                        <div class="form-group">
+                            <textarea id="report-summary" rows="4" placeholder="Brief overview of the report..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Key Metrics</h3>
+                        <div id="metrics-container">
+                            <!-- Metrics will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addMetric()">
+                            + Add Metric
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Highlights</h3>
+                        <div id="highlights-container">
+                            <!-- Highlights will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addHighlight()">
+                            + Add Highlight
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Recommendations</h3>
+                        <div id="recommendations-container">
+                            <!-- Recommendations will be added here -->
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addRecommendation()">
+                            + Add Recommendation
+                        </button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Contact Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="contact-name">Name</label>
+                                <input type="text" id="contact-name" placeholder="Jane Smith">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-title">Title</label>
+                                <input type="text" id="contact-title" placeholder="Account Manager">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Email</label>
+                                <input type="email" id="contact-email" placeholder="jane@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-phone">Phone</label>
+                                <input type="tel" id="contact-phone" placeholder="+1 (555) 123-4567">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Output Options</h3>
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="generate-pdf">
+                                <span class="checkmark"></span>
+                                Also generate PDF
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                            </svg>
+                            Generate Report
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Templates View -->
+            <section id="templates-view" class="view">
+                <header class="view-header">
+                    <div>
+                        <h1>Templates</h1>
+                        <p class="subtitle">Available report templates</p>
+                    </div>
+                </header>
+                
+                <div class="templates-grid" id="templates-grid">
+                    <!-- Templates will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Client Modal -->
+    <div id="client-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add Client</h2>
+                <button class="modal-close" onclick="closeClientModal()">&times;</button>
+            </div>
+            <form id="client-form">
+                <div class="form-group">
+                    <label for="client-id">Client ID *</label>
+                    <input type="text" id="client-id" required placeholder="acme_corp" pattern="[a-z0-9_]+" title="Lowercase letters, numbers, and underscores only">
+                </div>
+                <div class="form-group">
+                    <label for="display-name">Display Name *</label>
+                    <input type="text" id="display-name" required placeholder="Acme Corporation">
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="primary-color">Primary Color</label>
+                        <div class="color-input">
+                            <input type="color" id="primary-color-picker" value="#0066cc">
+                            <input type="text" id="primary-color" placeholder="#0066cc">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="secondary-color">Secondary Color</label>
+                        <div class="color-input">
+                            <input type="color" id="secondary-color-picker" value="#ffffff">
+                            <input type="text" id="secondary-color" placeholder="#ffffff">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="font-family">Font Family</label>
+                    <input type="text" id="font-family" placeholder="Roboto, sans-serif">
+                </div>
+                <div class="form-group">
+                    <label for="website-url">Website URL</label>
+                    <input type="url" id="website-url" placeholder="https://example.com">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeClientModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="modal">
+        <div class="modal-content result-modal-content">
+            <div class="modal-header">
+                <h2>Report Generated!</h2>
+                <button class="modal-close" onclick="closeResultModal()">&times;</button>
+            </div>
+            <div class="result-content">
+                <div class="result-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22,4 12,14.01 9,11.01"/>
+                    </svg>
+                </div>
+                <p>Your report has been successfully generated.</p>
+                <div class="download-buttons" id="download-buttons">
+                    <!-- Download buttons will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
+

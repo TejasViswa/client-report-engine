@@ -3,10 +3,15 @@ docxtpl>=0.16.7
 python-docx>=1.1.0
 Jinja2>=3.1.2
 
+# API dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
 # PDF conversion (optional - can also use LibreOffice)
 docx2pdf>=0.1.8; sys_platform == "win32" or sys_platform == "darwin"
 
 # Development & testing
 pytest>=7.4.0
 pytest-cov>=4.1.0
-
+httpx>=0.25.0

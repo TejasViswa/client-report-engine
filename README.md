@@ -1,6 +1,6 @@
 # Client Report Engine
 
-A Python tool for generating professional client reports from DOCX templates with JSON data. Supports automatic PDF conversion via LibreOffice or docx2pdf.
+A Python tool for generating professional client reports from DOCX templates with JSON data. Includes a FastAPI REST API for managing clients and generating reports programmatically.
 
 ## Features
 
@@ -8,6 +8,8 @@ A Python tool for generating professional client reports from DOCX templates wit
 - **JSON data input**: Feed structured data to populate templates
 - **Cross-platform PDF conversion**: Supports LibreOffice (all platforms) and docx2pdf (Windows/macOS)
 - **CLI interface**: Easy command-line usage for automation
+- **REST API**: FastAPI-based API for client management and report generation
+- **Brand Management**: Store client brand configs (colors, fonts, logos)
 - **Programmatic API**: Import and use in your Python projects
 
 ## Installation
@@ -127,25 +129,84 @@ pdf_path = docx_to_pdf(docx_path)
 print(f"PDF created: {pdf_path}")
 ```
 
+## REST API & Web UI
+
+Start the server:
+
+```bash
+cd src
+uvicorn api.main:app --reload
+```
+
+- **Web UI**: `http://localhost:8000` - Beautiful dashboard for managing clients and generating reports
+- **API Docs**: `http://localhost:8000/docs` - Interactive Swagger documentation
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Health check |
+| GET | `/clients` | List all clients |
+| POST | `/clients` | Create/update client |
+| GET | `/clients/{id}` | Get client by ID |
+| DELETE | `/clients/{id}` | Delete client |
+| POST | `/clients/{id}/logo` | Upload client logo |
+| GET | `/templates` | List available templates |
+| POST | `/reports/generate` | Generate a report |
+| GET | `/reports/download/{filename}` | Download generated report |
+
+### Example: Create Client & Generate Report
+
+```bash
+# Create a client
+curl -X POST http://localhost:8000/clients \
+  -H "Content-Type: application/json" \
+  -d '{"client_id": "acme", "display_name": "Acme Corp", "primary_color": "#004481"}'
+
+# Generate a report
+curl -X POST http://localhost:8000/reports/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": "acme",
+    "report_date": "December 9, 2025",
+    "executive_summary": "Q4 performance review",
+    "metrics": [{"name": "Revenue", "value": "$2.4M", "change": "+12%", "status": "positive"}],
+    "highlights": ["Launched new product", "Expanded to EU"],
+    "generate_pdf": true
+  }'
+```
+
 ## Project Structure
 
 ```
 client_report_engine/
 ├── data/                       # Sample data files
-│   └── sample_client.json
+│   ├── sample_client.json
+│   └── brands.json             # Client brand storage
+├── brands/                     # Uploaded client logos
 ├── reports/
 │   ├── templates/              # DOCX templates
 │   └── output/                 # Generated reports
 ├── scripts/
 │   └── create_sample_template.py
 ├── src/
-│   └── client_reports/
+│   ├── api/                    # FastAPI REST API
+│   │   ├── __init__.py
+│   │   ├── main.py             # API endpoints
+│   │   ├── models.py           # Pydantic models
+│   │   ├── storage.py          # Brand persistence
+│   │   └── static/             # Web UI frontend
+│   │       ├── index.html
+│   │       ├── styles.css
+│   │       └── app.js
+│   └── client_reports/         # Core report engine
 │       ├── __init__.py
 │       ├── cli.py              # Command-line interface
 │       ├── pdf.py              # PDF conversion
 │       └── renderer.py         # DOCX rendering
 ├── tests/
 │   ├── conftest.py
+│   ├── test_api.py
 │   ├── test_cli.py
 │   ├── test_pdf.py
 │   └── test_renderer.py
