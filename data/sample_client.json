@@ -1,0 +1,63 @@
+{
+    "client_name": "Acme Corporation",
+    "report_date": "December 9, 2025",
+    "report_period": "Q4 2025",
+    "prepared_by": "Analytics Team",
+    "executive_summary": "This quarterly report provides a comprehensive overview of Acme Corporation's performance metrics, highlighting key achievements and areas for improvement.",
+    "metrics": [
+        {
+            "name": "Revenue",
+            "value": "$2.4M",
+            "change": "+12%",
+            "status": "positive"
+        },
+        {
+            "name": "Customer Acquisition",
+            "value": "1,250",
+            "change": "+8%",
+            "status": "positive"
+        },
+        {
+            "name": "Churn Rate",
+            "value": "2.3%",
+            "change": "-0.5%",
+            "status": "positive"
+        },
+        {
+            "name": "NPS Score",
+            "value": "72",
+            "change": "+5",
+            "status": "positive"
+        }
+    ],
+    "highlights": [
+        "Successfully launched new product line in European markets",
+        "Achieved 99.9% uptime across all services",
+        "Reduced customer support response time by 40%",
+        "Completed migration to cloud infrastructure"
+    ],
+    "recommendations": [
+        {
+            "priority": "High",
+            "title": "Expand Marketing Budget",
+            "description": "Increase digital marketing spend by 20% to capitalize on momentum"
+        },
+        {
+            "priority": "Medium",
+            "title": "Customer Success Program",
+            "description": "Implement proactive customer success outreach for enterprise accounts"
+        },
+        {
+            "priority": "Low",
+            "title": "Internal Training",
+            "description": "Schedule quarterly training sessions for support team"
+        }
+    ],
+    "contact": {
+        "name": "Jane Smith",
+        "title": "Account Manager",
+        "email": "jane.smith@example.com",
+        "phone": "+1 (555) 123-4567"
+    }
+}
+
